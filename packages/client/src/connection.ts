@@ -1,4 +1,4 @@
-import { AsyncLocalStorage } from 'node:async_hooks';
+import { AsyncLocalStorage as NodeAsyncLocalStorage } from 'node:async_hooks';
 import * as grpc from '@grpc/grpc-js';
 import type { RPCImpl } from 'protobufjs';
 import { filterNullAndUndefined, normalizeTlsConfig, TLSConfig } from '@temporalio/common/lib/internal-non-workflow';
@@ -7,6 +7,8 @@ import { isGrpcServiceError, ServiceError } from './errors';
 import { defaultGrpcRetryOptions, makeGrpcRetryInterceptor } from './grpc-retry';
 import pkg from './pkg';
 import { CallContext, HealthService, Metadata, OperatorService, WorkflowService } from './types';
+
+const AsyncLocalStorage = ((globalThis as any).AsyncLocalStorage ?? NodeAsyncLocalStorage) as typeof import('async_hooks').AsyncLocalStorage;
 
 /**
  * gRPC and Temporal Server connection options
